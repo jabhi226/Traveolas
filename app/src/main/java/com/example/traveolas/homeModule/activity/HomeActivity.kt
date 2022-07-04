@@ -43,9 +43,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initViewPager() {
-
         viewBinding.viewPager.apply {
             adapter = ViewPagerAdapter(supportFragmentManager, this@HomeActivity.lifecycle)
+            isUserInputEnabled = false
         }
         TabLayoutMediator(viewBinding.tabLayout, viewBinding.viewPager) { tab, position ->
             tab.text = nameOfTabs[position]
