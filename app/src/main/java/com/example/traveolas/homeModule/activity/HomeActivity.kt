@@ -1,16 +1,12 @@
 package com.example.traveolas.homeModule.activity
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.children
 import com.example.traveolas.R
 import com.example.traveolas.databinding.ActivityHomeBinding
 import com.example.traveolas.homeModule.adapters.ViewPagerAdapter
@@ -19,27 +15,82 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class HomeActivity : AppCompatActivity() {
 
-    lateinit var viewBinding: ActivityHomeBinding
+    companion object {
+        const val REQUEST_PERMISSIONS_REQUEST_CODE = 101
+    }
+
+    private lateinit var viewBinding: ActivityHomeBinding
     private val nameOfTabs = arrayOf(
         "Community",
-        "Map",
         "Profile",
+        "Map",
         "Profile"
     )
 
     private val iconsOfTabs = arrayOf(
-        R.drawable.ic_baseline_home_24,
-        R.drawable.ic_baseline_map_24,
-        R.drawable.ic_baseline_person_24,
-        R.drawable.ic_baseline_person_24
+        R.drawable.ic_earth__southeast_asia1,
+        R.drawable.ic_user__avatar_1,
+        R.drawable.ic_map1,
+        R.drawable.ic_user__avatar_1
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityHomeBinding.inflate(LayoutInflater.from(this))
         setContentView(viewBinding.root)
+        askPermissions()
 
         initViewPager()
+        viewBinding.viewPager.currentItem = 2
+    }
+
+    private fun askPermissions() {
+        val permissions = arrayOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_NETWORK_STATE,
+            Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.INTERNET
+        )
+        requestPermissionsIfNecessary(permissions)
+    }
+
+    private fun requestPermissionsIfNecessary(permissions: Array<String>) {
+        val permissionsToRequest: ArrayList<String> = ArrayList()
+        for (permission in permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Permission is not granted
+                permissionsToRequest.add(permission)
+            }
+        }
+        if (permissionsToRequest.size > 0) {
+            ActivityCompat.requestPermissions(
+                this,
+                permissionsToRequest.toArray(arrayOfNulls(0)),
+                REQUEST_PERMISSIONS_REQUEST_CODE
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        val permissionsToRequest: ArrayList<String?> = ArrayList()
+        for (i in grantResults.indices) {
+            permissionsToRequest.add(permissions[i])
+        }
+        if (permissionsToRequest.size > 0) {
+            ActivityCompat.requestPermissions(
+                this,
+                permissionsToRequest.toArray(arrayOfNulls(0)),
+                REQUEST_PERMISSIONS_REQUEST_CODE
+            )
+        }
     }
 
     private fun initViewPager() {

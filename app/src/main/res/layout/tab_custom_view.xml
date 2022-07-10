@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
-        android:src="@drawable/ic_baseline_home_24"
+        android:src="@drawable/ic_earth__southeast_asia1"
         android:id="@+id/img"
         app:layout_constraintBottom_toTopOf="@id/txt"
         app:layout_constraintEnd_toEndOf="parent"

@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent"
+    android:background="@color/grey_background"
     tools:context=".homeModule.fragments.CommunityFragment">
 
     <TextView
-        style="@style/TextViewTheme"
+        style="@style/text_view_theme"
         android:text="Community"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"

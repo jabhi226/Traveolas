@@ -25,10 +25,10 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
             0 -> {
                 CommunityFragment()
             }
-            1 -> {
+            2 -> {
                 MapFragment()
             }
-            2 -> {
+            1 -> {
                 ProfileFragment()
             }
             else -> {
