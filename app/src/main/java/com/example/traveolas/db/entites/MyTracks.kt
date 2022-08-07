@@ -1,4 +1,4 @@
-package com.example.traveolas.appDataBase.entites
+package com.example.traveolas.db.entites
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

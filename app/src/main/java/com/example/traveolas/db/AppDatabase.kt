@@ -1,9 +1,10 @@
-package com.example.traveolas.appDataBase
+package com.example.traveolas.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.traveolas.appDataBase.AppDatabase.Companion.DATABASE_VERSION
-import com.example.traveolas.appDataBase.entites.MyTracks
+import com.example.traveolas.db.AppDatabase.Companion.DATABASE_VERSION
+import com.example.traveolas.db.daos.MyTracksDao
+import com.example.traveolas.db.entites.MyTracks
 
 @Database(
     entities = [MyTracks::class],
@@ -16,4 +17,6 @@ abstract class AppDatabase : RoomDatabase() {
         const val DATABASE_VERSION = 1
         const val DATABASE_NAME = "location_database"
     }
+
+    abstract val myTrackDao: MyTracksDao
 }

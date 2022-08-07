@@ -2,6 +2,7 @@ package com.example.traveolas.homeModule.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.location.Location
 import android.os.Bundle
@@ -11,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.traveolas.R
 import com.example.traveolas.databinding.FragmentMapBinding
+import com.example.traveolas.myTrackModule.activities.MyTrackActivity
 import com.example.traveolas.utils.LocationHelper
 import com.example.traveolas.utils.SharedPref
 import com.example.traveolas.utils.Utils
@@ -44,8 +46,8 @@ class MapFragment : Fragment(), View.OnClickListener {
 
     private var currentGeoPoint: GeoPoint? = null
 
-    var mumbai = GeoPoint(19.0760, 72.8777)
-    val pune = GeoPoint(18.5204, 73.8567)
+    private var mumbai = GeoPoint(19.0760, 72.8777)
+    private val pune = GeoPoint(18.5204, 73.8567)
 
     private fun showPopup(v : View){
         val popup = PopupMenu(requireContext(), v)
@@ -54,7 +56,8 @@ class MapFragment : Fragment(), View.OnClickListener {
         popup.setOnMenuItemClickListener { menuItem ->
             when(menuItem.itemId){
                 R.id.menu_action_my_track-> {
-                    Utils.showToast(requireContext(), "menu_action_my_track")
+                    val i = Intent(requireContext(), MyTrackActivity::class.java)
+                    startActivity(i)
                 }
             }
             true
@@ -90,9 +93,6 @@ class MapFragment : Fragment(), View.OnClickListener {
 //                    Utils.convertLatLongToDMS(location.latitude, location.longitude)
 //            }
 //        }
-    }
-
-    private fun setData() {
     }
 
     private fun initListener() {
@@ -245,7 +245,7 @@ class MapFragment : Fragment(), View.OnClickListener {
         _binding = null
     }
 
-    var i = 1
+    private var i = 1
     override fun onClick(p0: View?) {
         when (p0?.id) {
             binding?.recenter?.id -> {
@@ -253,9 +253,9 @@ class MapFragment : Fragment(), View.OnClickListener {
                     i++
                     setNewLocation(GeoPoint(it.latitude + (0.0002 * i), it.longitude + (0.0002 * i)))
                 }
-                binding?.menu?.id -> {
-                    binding?.menu?.let { showPopup(it) }
-                }
+            }
+            binding?.menu?.id -> {
+                binding?.menu?.let { showPopup(it) }
             }
         }
     }
