@@ -1,7 +1,9 @@
 package com.example.traveolas.homeModule.fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Path
+import android.graphics.Bitmap
+import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,36 +12,73 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.traveolas.R
 import com.example.traveolas.databinding.FragmentMapBinding
+import com.example.traveolas.utils.LocationHelper
 import com.example.traveolas.utils.SharedPref
 import com.example.traveolas.utils.Utils
+import kotlinx.coroutines.flow.Flow
+import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.util.PathBuilder
 import org.osmdroid.views.CustomZoomButtonsController
-import org.osmdroid.views.overlay.ItemizedIconOverlay
-import org.osmdroid.views.overlay.ItemizedOverlayWithFocus
-import org.osmdroid.views.overlay.OverlayItem
-import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.*
+import org.osmdroid.views.overlay.compass.CompassOverlay
+import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider
+import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
+
 class MapFragment : Fragment(), View.OnClickListener {
 
-    private var binding: FragmentMapBinding? = null
+    private var _binding: FragmentMapBinding? = null
+    private val binding get() = _binding
+    private var locationHelper: LocationHelper? = null
+
+    private var flow: Flow<Location>? = null
+
+    private var mapController: IMapController? = null
+    private var zoomController: CustomZoomButtonsController? = null
+    private var mLocationOverlay: MyLocationNewOverlay? = null
+    private var mCompassOverlay: CompassOverlay? = null
+    private var mRotationGestureOverlay: RotationGestureOverlay? = null
+
+    private var currentGeoPoint: GeoPoint? = null
+
+    var mumbai = GeoPoint(19.0760, 72.8777)
+    val pune = GeoPoint(18.5204, 73.8567)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMapBinding.inflate(inflater, container, false)
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
         return binding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initView()
+        initLocation()
         initMap()
         initListener()
+    }
+
+    private fun initLocation() {
+        locationHelper = LocationHelper(requireContext())
+//        val location = locationHelper?.location
+//        if (location != null) {
+//            binding?.coordinates?.text =
+//                Utils.convertLatLongToDMS(location.latitude, location.longitude)
+//        }
+//        CoroutineScope(Dispatchers.Default).launch {
+//            flow?.collectLatest { location ->
+//                Log.d("Updated_Location -->", "${location.latitude} | ${location.longitude}")
+//                binding?.coordinates?.text =
+//                    Utils.convertLatLongToDMS(location.latitude, location.longitude)
+//            }
+//        }
+    }
+
+    private fun setData() {
     }
 
     private fun initListener() {
@@ -48,90 +87,40 @@ class MapFragment : Fragment(), View.OnClickListener {
         }
     }
 
-//    private val listOfTile = arrayOf<ITileSource>(
-//        TileSourceFactory.MAPNIK,
-//        TileSourceFactory.WIKIMEDIA,
-//        TileSourceFactory.PUBLIC_TRANSPORT,
-//        TileSourceFactory.CLOUDMADESTANDARDTILES,
-//        TileSourceFactory.CLOUDMADESMALLTILES,
-//        TileSourceFactory.FIETS_OVERLAY_NL,
-//        TileSourceFactory.BASE_OVERLAY_NL,
-//        TileSourceFactory.ROADS_OVERLAY_NL,
-//        TileSourceFactory.HIKEBIKEMAP,
-//        TileSourceFactory.OPEN_SEAMAP,
-//        TileSourceFactory.USGS_TOPO,
-//        TileSourceFactory.USGS_SAT,
-//        TileSourceFactory.ChartbundleWAC,
-//        TileSourceFactory.ChartbundleENRH,
-//        TileSourceFactory.ChartbundleENRL,
-//        TileSourceFactory.OpenTopo,
-//        TileSourceFactory.ChartbundleWAC
-//    )
-
-    private var clickCounter = 0
-    private fun initView() {
-        binding?.apply {
-            text.setOnClickListener {
-//                Utils.showToast(
-//                    requireContext(),
-//                    "$clickCounter | ${listOfTile[clickCounter].name()}"
-//                )
-//                binding?.mapView?.setTileSource(listOfTile[clickCounter])
-//                clickCounter++
-//                if (clickCounter >= listOfTile.size) {
-//                    clickCounter = 0
-//                }
-            }
-        }
-    }
-
-    var mumbai = GeoPoint(19.0760, 72.8777)
-    val pune = GeoPoint(18.5204, 73.8567)
     private fun initMap() {
+        currentGeoPoint = mumbai
+
         Configuration.getInstance().load(
             requireContext(),
             SharedPref.getSharedPrefObject(requireContext())
         )
         binding?.apply {
             mapView.apply {
-                this.setZoomRounding(false)
-                this.setTileSource(TileSourceFactory.USGS_SAT)
-                this.setMultiTouchControls(true)
-
-                val mLocationOverlay =
-                    MyLocationNewOverlay(GpsMyLocationProvider(requireContext()), this)
-                val bitmap = Utils.drawableToBitmap(
+                setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE)
+                val locationIcon = Utils.drawableToBitmap(
                     requireContext(),
                     R.drawable.ic_location__person__filled_1
                 )
-                mLocationOverlay.setPersonIcon(bitmap)
-                mLocationOverlay.enableAutoStop = true
-                mLocationOverlay.enableFollowLocation()
-                mLocationOverlay.enableMyLocation()
-//                mumbai = mLocationOverlay.myLocation
+
+//                maxZoomLevel = 9.0
+                minZoomLevel = 19.0
+
+                setLocationOverlay(locationIcon)
                 overlays.add(mLocationOverlay)
 
-                this.zoomController.setVisibility(CustomZoomButtonsController.Visibility.ALWAYS)
-                this.zoomController.display.setBitmaps(bitmap, bitmap, bitmap, bitmap)
+                //compass overlay
+//                setCompassOverlay()
+//                overlays.add(mCompassOverlay)
 
-                val mapController = controller
-                mapController.setCenter(mumbai)
-                mapController.setZoom(this.maxZoomLevel - 10)
+                //rotation gesture overlay
+                setRotationGestureOverlay()
+                overlays.add(mRotationGestureOverlay)
 
-                val path = Path()
-                path.addRect(0F, 2F, 1F, 2F, Path.Direction.CW)
-                PathBuilder(path)
+                this@MapFragment.zoomController = this.zoomController
+                setZoomController()
 
-                val myPath = Polyline(binding?.mapView)
-                myPath.width = 3F
-                myPath.color = R.color.primary_blue
-                myPath.setPoints(listOf(mumbai, pune))
-                myPath.isGeodesic = true
-                myPath.setDensityMultiplier(1.3F)
-                myPath.setDowngradeDisplay(true)
-//            myPath.addPoint(mumbai)
-//            myPath.addPoint(pune)
-                overlays.add(myPath)
+                this@MapFragment.mapController = controller
+                setMapController()
 
                 val items = ArrayList<OverlayItem>()
                 val overlayItem = OverlayItem("Marker", "DIS", mumbai)
@@ -165,17 +154,66 @@ class MapFragment : Fragment(), View.OnClickListener {
                 this.overlays.add(pointers)
             }
         }
-        binding?.mapView?.apply {
+    }
+
+    private fun setMapController() {
+        val latLong = locationHelper?.location
+        if (latLong != null) {
+            mapController?.setCenter(GeoPoint(latLong.latitude, latLong.longitude))
+            Utils.showToast(requireContext(), "setMapController")
         }
+        mapController?.setZoom(19.0)
+    }
+
+    private fun setZoomController() {
+        zoomController?.activate()
+        zoomController?.setZoomInEnabled(true)
+        zoomController?.setVisibility(CustomZoomButtonsController.Visibility.SHOW_AND_FADEOUT)
+    }
+
+    private fun setRotationGestureOverlay() {
+        mRotationGestureOverlay = RotationGestureOverlay(binding?.mapView)
+        mRotationGestureOverlay?.isEnabled = true
+        mRotationGestureOverlay?.isOptionsMenuEnabled = true
+        binding?.mapView?.setMultiTouchControls(true)
+    }
+
+    private fun setCompassOverlay() {
+        mCompassOverlay =
+            CompassOverlay(context, InternalCompassOrientationProvider(context), binding?.mapView)
+        mCompassOverlay?.enableCompass()
+        mCompassOverlay?.isPointerMode = true
+        mCompassOverlay?.isOptionsMenuEnabled = true
+    }
+
+    private fun setLocationOverlay(locationIcon: Bitmap) {
+        mLocationOverlay =
+            MyLocationNewOverlay(GpsMyLocationProvider(requireContext()), binding?.mapView)
+        mLocationOverlay?.setPersonIcon(locationIcon)
+        mLocationOverlay?.enableAutoStop = true
+        mLocationOverlay?.enableMyLocation()
+        mLocationOverlay?.enableFollowLocation()
+
+//        mLocationOverlay?.setDirectionIcon(
+//            Utils.drawableToBitmap(
+//                requireContext(),
+//                R.drawable.ic_recenter
+//            )
+//        )
+//        mLocationOverlay?.isOptionsMenuEnabled = true
+//        val abc = mLocationOverlay?.mMyLocationProvider
+//        abc?.startLocationProvider { location, source ->
+//            Utils.showToast(requireContext(), "startLocationProvider")
+//            setNewLocation(GeoPoint(location.latitude, location.longitude))
+//        }
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        onCreateView(LayoutInflater.from(context), null, null)
+//        binding = FragmentMapBinding.inflate(LayoutInflater.from(context), null, false)
+        Configuration.getInstance().load(getContext(), SharedPref.getSharedPrefObject(requireContext()))
         initMap()
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onPause() {
@@ -189,14 +227,69 @@ class MapFragment : Fragment(), View.OnClickListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
+        _binding = null
     }
 
+    var i = 1
     override fun onClick(p0: View?) {
-        when (p0?.id){
+        when (p0?.id) {
             binding?.recenter?.id -> {
-
+                locationHelper?.location?.let {
+                    i++
+                    setNewLocation(GeoPoint(it.latitude + (0.0002 * i), it.longitude + (0.0002 * i)))
+                }
             }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setNewLocation(location: GeoPoint) {
+        Utils.showToast(requireContext(), "setLocationText")
+        binding?.coordinates?.text =
+            Utils.convertLatLongToDMS(
+                location.latitude,
+                location.longitude
+            ) + " : ${location.altitude}"
+        mapController?.animateTo(
+            location,
+            19.0,
+            800L
+        )
+        addPoyLine(location)
+    }
+
+    private fun addPoyLine(newGeoPoint: GeoPoint) {
+        if (currentGeoPoint == null) {
+            currentGeoPoint = newGeoPoint
+        }
+        binding?.mapView?.let {
+            val myPath = Polyline()
+            myPath.width = 3F
+            myPath.color = R.color.primary_blue
+            myPath.setPoints(listOf(currentGeoPoint, newGeoPoint))
+            myPath.isGeodesic = true
+            myPath.setDensityMultiplier(2.3F)
+            myPath.setDowngradeDisplay(true)
+            binding?.mapView?.overlays?.add(myPath)
+            currentGeoPoint = newGeoPoint
+            addCheckPoint(currentGeoPoint!!)
+        }
+    }
+
+    private fun addCheckPoint(location: GeoPoint)
+    {
+        binding?.mapView?.let {
+            val marker = Marker(it)
+            marker.icon = ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.ic_user__avatar_1
+            )
+            marker.position = location
+//        marker.setOnMarkerClickListener { marker, mapView ->
+//            Utils.showToast(mapView.context, marker.id.toString())
+//            false
+//        }
+            binding?.mapView?.overlays?.add(marker)
         }
     }
 
