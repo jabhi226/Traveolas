@@ -5,9 +5,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.location.Location
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.traveolas.R
@@ -48,6 +47,21 @@ class MapFragment : Fragment(), View.OnClickListener {
     var mumbai = GeoPoint(19.0760, 72.8777)
     val pune = GeoPoint(18.5204, 73.8567)
 
+    private fun showPopup(v : View){
+        val popup = PopupMenu(requireContext(), v)
+        val inflater: MenuInflater = popup.menuInflater
+        inflater.inflate(R.menu.my_track_menu, popup.menu)
+        popup.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.menu_action_my_track-> {
+                    Utils.showToast(requireContext(), "menu_action_my_track")
+                }
+            }
+            true
+        }
+        popup.show()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -84,6 +98,7 @@ class MapFragment : Fragment(), View.OnClickListener {
     private fun initListener() {
         binding?.apply {
             recenter.setOnClickListener(this@MapFragment)
+            menu.setOnClickListener(this@MapFragment)
         }
     }
 
@@ -237,6 +252,9 @@ class MapFragment : Fragment(), View.OnClickListener {
                 locationHelper?.location?.let {
                     i++
                     setNewLocation(GeoPoint(it.latitude + (0.0002 * i), it.longitude + (0.0002 * i)))
+                }
+                binding?.menu?.id -> {
+                    binding?.menu?.let { showPopup(it) }
                 }
             }
         }
