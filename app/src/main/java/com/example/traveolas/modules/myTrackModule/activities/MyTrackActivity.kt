@@ -1,15 +1,13 @@
-package com.example.traveolas.myTrackModule.activities
+package com.example.traveolas.modules.myTrackModule.activities
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
-import com.example.traveolas.R
+import androidx.fragment.app.Fragment
 import com.example.traveolas.databinding.ActivityMyTrackBinding
-import com.example.traveolas.myTrackModule.fragments.MyTrackFragment
-import com.example.traveolas.utils.Utils
+import com.example.traveolas.modules.myTrackModule.fragments.MyTrackFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -23,13 +21,14 @@ class MyTrackActivity : AppCompatActivity() {
         binding = ActivityMyTrackBinding.inflate(LayoutInflater.from(this))
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        replaceFragment(MyTrackFragment())
+        addFragmentToBackStack(MyTrackFragment())
     }
 
-    private fun replaceFragment(fragment: MyTrackFragment) {
+    fun addFragmentToBackStack(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
-            .replace(binding.activityMyTrackFrame.id, fragment)
+            .add(binding.activityMyTrackFrame.id, fragment, fragment::class.java.simpleName)
+            .addToBackStack(fragment::class.java.simpleName)
             .commit()
     }
 

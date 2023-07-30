@@ -204,16 +204,13 @@ open class LocationHelper(private val mContext: Context) : Service(),
      * @return null or List<Address>
     </Address> */
     fun getGeocoderAddress(context: Context?): List<Address>? {
-        if (location != null) {
-            val geocoder = Geocoder(context, Locale.ENGLISH)
-            try {
-                return geocoder.getFromLocation(latitude, longitude, geocoderMaxResults)
-            } catch (e: IOException) {
-                //e.printStackTrace();
-                Log.e(TAG, "Impossible to connect to Geocoder", e)
-            }
+        return context?.let {
+            return Geocoder(it, Locale.ENGLISH).getFromLocation(
+                latitude,
+                longitude,
+                geocoderMaxResults
+            )
         }
-        return null
     }
 
     /**
@@ -275,9 +272,11 @@ open class LocationHelper(private val mContext: Context) : Service(),
     override fun onLocationChanged(location: Location) {
         Log.d("onLocationChanged", "${location.latitude} | ${location.longitude}")
     }
+
     override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {
         Log.d(TAG, "onStatusChanged: $status")
     }
+
     override fun onProviderEnabled(provider: String) {}
     override fun onProviderDisabled(provider: String) {}
     override fun onBind(intent: Intent): IBinder? {

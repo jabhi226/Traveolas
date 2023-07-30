@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_background"
-    tools:context=".homeModule.fragments.ProfileFragment">
+    tools:context=".modules.homeModule.fragments.ProfileFragment">
 
     <TextView
         app:layout_constraintBottom_toBottomOf="parent"

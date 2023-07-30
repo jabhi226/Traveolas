@@ -1,13 +1,13 @@
-package com.example.traveolas.myTrackModule
+package com.example.traveolas.modules.myTrackModule.adapters
 
 import android.annotation.SuppressLint
 import android.widget.TextView
 import com.example.traveolas.R
 import com.example.traveolas.db.entites.MyTracks
-import com.example.traveolas.utils.HelperBaseClasses.GenericListAdapter
+import com.example.traveolas.utils.helperBaseClasses.GenericListAdapter
 
 @SuppressLint("ResourceType")
-class MyTrackAdapter :
+class MyTrackAdapter(onTrackItemClickListener: OnTrackItemClickListener) :
     GenericListAdapter<MyTracks>(
         layoutId = R.layout.item_my_track_list,
         bind = { item, holder, itemCount ->
@@ -18,6 +18,10 @@ class MyTrackAdapter :
             date.text = item.name
             name.text = item.date
             dist.text = item.distance
+            holder.itemView.setOnClickListener { onTrackItemClickListener.onTrackItemClicked(item) }
         }) {
 
+    interface OnTrackItemClickListener {
+        fun onTrackItemClicked(item: MyTracks)
+    }
 }

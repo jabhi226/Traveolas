@@ -1,4 +1,4 @@
-package com.example.traveolas.homeModule.fragments
+package com.example.traveolas.modules.homeModule.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,10 +12,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.traveolas.R
 import com.example.traveolas.databinding.FragmentMapBinding
-import com.example.traveolas.myTrackModule.activities.MyTrackActivity
+import com.example.traveolas.modules.myTrackModule.activities.MyTrackActivity
 import com.example.traveolas.utils.LocationHelper
 import com.example.traveolas.utils.SharedPref
 import com.example.traveolas.utils.Utils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import org.osmdroid.api.IMapController
 import org.osmdroid.config.Configuration
@@ -29,7 +30,7 @@ import org.osmdroid.views.overlay.gestures.RotationGestureOverlay
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
-
+@AndroidEntryPoint
 class MapFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentMapBinding? = null

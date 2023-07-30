@@ -1,4 +1,4 @@
-package com.example.traveolas.utils.HelperBaseClasses
+package com.example.traveolas.utils.helperBaseClasses
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

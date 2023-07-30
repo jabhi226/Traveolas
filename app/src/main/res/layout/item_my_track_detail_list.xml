@@ -8,14 +8,16 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/id"
         style="@style/text_view_theme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="12th May"
+        android:text="1"
         app:layout_constraintEnd_toStartOf="@id/name"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/name"
@@ -23,18 +25,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="12th May"
-        app:layout_constraintEnd_toStartOf="@id/distance"
-        app:layout_constraintStart_toEndOf="@id/date"
+        app:layout_constraintEnd_toStartOf="@id/latitude"
+        app:layout_constraintStart_toEndOf="@id/id"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/distance"
+        android:id="@+id/latitude"
         style="@style/text_view_theme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="12th May"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/longitude"
         app:layout_constraintStart_toEndOf="@id/name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/longitude"
+        style="@style/text_view_theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12th May"
+        app:layout_constraintEnd_toStartOf="@+id/options"
+        app:layout_constraintStart_toEndOf="@id/latitude"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+
+        android:id="@+id/options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_overflow_menu__vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/longitude"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

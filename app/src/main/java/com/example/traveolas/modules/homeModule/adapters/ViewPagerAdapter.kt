@@ -1,12 +1,12 @@
-package com.example.traveolas.homeModule.adapters
+package com.example.traveolas.modules.homeModule.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.traveolas.homeModule.fragments.CommunityFragment
-import com.example.traveolas.homeModule.fragments.MapFragment
-import com.example.traveolas.homeModule.fragments.ProfileFragment
+import com.example.traveolas.modules.homeModule.fragments.CommunityFragment
+import com.example.traveolas.modules.homeModule.fragments.MapFragment
+import com.example.traveolas.modules.homeModule.fragments.ProfileFragment
 
 class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {

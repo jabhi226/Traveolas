@@ -20,11 +20,11 @@
         android:name=".application.MyApplication"
         android:theme="@style/Theme.Traveolas">
         <activity
-            android:name=".myTrackModule.activities.MyTrackActivity"
+            android:name="com.example.traveolas.modules.myTrackModule.activities.MyTrackActivity"
             android:theme="@style/Theme.Traveolas.DarkActionBar"
             android:exported="false" />
         <activity
-            android:name=".homeModule.activity.HomeActivity"
+            android:name="com.example.traveolas.modules.homeModule.activity.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

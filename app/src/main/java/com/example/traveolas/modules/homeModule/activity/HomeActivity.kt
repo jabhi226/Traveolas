@@ -1,23 +1,28 @@
-package com.example.traveolas.homeModule.activity
+package com.example.traveolas.modules.homeModule.activity
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.traveolas.R
 import com.example.traveolas.databinding.ActivityHomeBinding
-import com.example.traveolas.homeModule.adapters.ViewPagerAdapter
+import com.example.traveolas.modules.homeModule.adapters.ViewPagerAdapter
+import com.example.traveolas.modules.homeModule.viewModel.HomeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
 
     companion object {
         const val REQUEST_PERMISSIONS_REQUEST_CODE = 101
     }
+
+    private val viewModel by viewModels<HomeViewModel>()
 
     private lateinit var viewBinding: ActivityHomeBinding
     private val nameOfTabs = arrayOf(
@@ -38,10 +43,13 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityHomeBinding.inflate(LayoutInflater.from(this))
         setContentView(viewBinding.root)
+
+
         askPermissions()
 
         initViewPager()
         viewBinding.viewPager.currentItem = 2
+        viewModel.addDemoData()
     }
 
     private fun askPermissions() {
