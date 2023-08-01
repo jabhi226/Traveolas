@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.location.Location
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import kotlin.math.abs
 
 
 object Utils {
@@ -75,7 +76,7 @@ object Utils {
             builder.append("E ")
         }
         val longitudeDegrees: String =
-            Location.convert(Math.abs(longitude), Location.FORMAT_SECONDS)
+            Location.convert(abs(longitude), Location.FORMAT_SECONDS)
         val longitudeSplit = longitudeDegrees.split(":").toTypedArray()
         builder.append(longitudeSplit[0])
         builder.append("°")

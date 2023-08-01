@@ -7,6 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.traveolas.db.AppDatabase
 import com.example.traveolas.db.daos.MyTrackDetailsDao
 import com.example.traveolas.db.daos.MyTracksDao
+import com.example.traveolas.utils.LocationHelper
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -39,5 +40,16 @@ class DatabaseModule {
     @Provides
     fun provideMyTrackDetailsDao(db: AppDatabase): MyTrackDetailsDao {
         return db.myTrackDetailsDao
+    }
+
+    @Provides
+    fun provideContext(@ApplicationContext context: Context): Context{
+        return context
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationHelper(@ApplicationContext context: Context): LocationHelper{
+        return LocationHelper(context)
     }
 }

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:elevation="-32dp"
+    tools:context=".modules.homeModule.fragments.NewMapFragment">
+
+    <View
+        android:id="@+id/view_header_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="-24dp"
+        android:background="@drawable/blue_bottom_round_radius"
+        android:paddingBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_coordinates"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_overflow_menu__vertical_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:fontFamily="@font/carme"
+        android:text="Current Coordinates "
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/tv_coordinates"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_coordinates"
+        style="@style/text_view_theme"
+        android:layout_margin="16dp"
+        android:background="@drawable/round_bg"
+        android:backgroundTint="@color/white"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_text"
+        tools:text="32° 18' 23.1 N ; 122° 36' 52.5" />
+
+
+    <com.mapbox.maps.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_header_container"
+        mapbox:mapbox_cameraTargetLat="19.065518"
+        mapbox:mapbox_cameraTargetLng="72.883209"
+        mapbox:mapbox_cameraZoom="9.0" />
+
+
+    <TextView
+        android:id="@+id/tv_recenter"
+        style="@style/text_view_theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="18dp"
+        android:background="@drawable/round_bg"
+        android:backgroundTint="@color/black_353535"
+        android:drawablePadding="8dp"
+        android:elevation="32dp"
+        android:paddingStart="16dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="6dp"
+        android:text="Re-Centre"
+        android:textColor="@color/white"
+        android:translationZ="32dp"
+        app:drawableStartCompat="@drawable/ic_recenter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_header_container" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/round_bg"
+        android:backgroundTint="@color/white_F1"
+        android:elevation="32dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:translationZ="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_bg"
+            android:backgroundTint="#333A7EE3"
+            android:fontFamily="@font/carme"
+            android:padding="8dp"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp"
+            android:text="Start Treck"
+            android:textColor="#3A7EE3"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_camera"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@drawable/round_bg"
+            android:backgroundTint="#353535"
+            android:fontFamily="@font/carme"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:src="@drawable/iv_camera"
+            app:layout_constraintBottom_toBottomOf="@id/tv_action"
+            app:layout_constraintEnd_toStartOf="@id/tv_sos"
+            app:layout_constraintStart_toEndOf="@id/tv_action"
+            app:layout_constraintTop_toTopOf="@id/tv_action" />
+
+        <TextView
+            android:id="@+id/tv_sos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_bg"
+            android:backgroundTint="#FB2F2F"
+            android:fontFamily="@font/carme"
+            android:padding="8dp"
+            android:paddingStart="32dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="8dp"
+            android:text="SOS"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_down"
+            app:layout_constraintStart_toEndOf="@id/iv_camera"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_down"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@drawable/round_bg_16"
+            android:backgroundTint="@color/white"
+            android:padding="4dp"
+            android:src="@drawable/iv_down"
+            app:layout_constraintBottom_toBottomOf="@id/tv_sos"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_sos"
+            app:layout_constraintTop_toTopOf="@id/tv_sos" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

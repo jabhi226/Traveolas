@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.traveolas.modules.homeModule.fragments.CommunityFragment
 import com.example.traveolas.modules.homeModule.fragments.MapFragment
+import com.example.traveolas.modules.homeModule.fragments.NewMapFragment
 import com.example.traveolas.modules.homeModule.fragments.ProfileFragment
 
 class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
@@ -26,7 +27,7 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
                 CommunityFragment()
             }
             2 -> {
-                MapFragment()
+                NewMapFragment.newInstance()
             }
             1 -> {
                 ProfileFragment()
